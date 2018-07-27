@@ -5,19 +5,25 @@ ScanLibrary is an android document scanning library built on top of OpenCV, usin
 
 <div align="center">
 
-		<img width="23%" src="https://raw.githubusercontent.com/andrejlukasevic/AndroidScannerDemo/master/ScanDemoExample/screenshots/a.png" alt="Scan Points" title="Scan Points"</img>
-        <img height="0" width="8px">
-        <img width="23%" src="https://raw.githubusercontent.com/andrejlukasevic/AndroidScannerDemo/master/ScanDemoExample/screenshots/b.png" alt="Magic colors" title="Magic colorst"</img>
-        <img height="0" width="8px">
-        <img width="23%"src="https://raw.githubusercontent.com/andrejlukasevic/AndroidScannerDemo/master/ScanDemoExample/screenshots/c.png" alt="Palette" title="Palette"></img>
-        <img height="0" width="8px">
-        <img width="23%" src="https://raw.githubusercontent.com/andrejlukasevic/AndroidScannerDemo/master/ScanDemoExample/screenshots/d.png" alt="Gray colors" title="Gray colorst"></img>
-        <img height="0" width="8px">
-        <img width="23%" src="https://raw.githubusercontent.com/andrejlukasevic/AndroidScannerDemo/master/ScanDemoExample/screenshots/e.png" alt="Normal colors" title="Normal colors"></img>
-        <img height="0" width="8px">
-        <img width="23%" src="https://raw.githubusercontent.com/andrejlukasevic/AndroidScannerDemo/master/ScanDemoExample/screenshots/f.png" alt="Rotated Image" title="Rotated Image"></img>
-        <img height="0" width="8px">
-        <img width="23%" src="https://raw.githubusercontent.com/andrejlukasevic/AndroidScannerDemo/master/ScanDemoExample/screenshots/g.png" alt="Zoomed Image" title="Zoomed Image"></img>
+<a href="https://raw.githubusercontent.com/jhansireddy/AndroidScannerDemo/master/ScanDemoExample/screenshots/scanInput.png" />
+<img width="23%" src="https://raw.githubusercontent.com/jhansireddy/AndroidScannerDemo/master/ScanDemoExample/screenshots/scanInput.png" alt="Scan Input" title="Scan Input"></img>
+
+<a href="https://raw.githubusercontent.com/jhansireddy/AndroidScannerDemo/master/ScanDemoExample/screenshots/scanPoints.png" />
+<img width="23%" src="https://raw.githubusercontent.com/jhansireddy/AndroidScannerDemo/master/ScanDemoExample/screenshots/scanPoints.png" alt="Scan Points" title="Scan Points"></img>
+
+<a href="https://raw.githubusercontent.com/jhansireddy/AndroidScannerDemo/master/ScanDemoExample/screenshots/blackWhiteScannedResult.png" />
+<img width="23%" src="https://raw.githubusercontent.com/jhansireddy/AndroidScannerDemo/master/ScanDemoExample/screenshots/blackWhiteScannedResult.png" alt="After Scan" title="After Scan"></img>
+
+<a href="https://raw.githubusercontent.com/jhansireddy/AndroidScannerDemo/master/ScanDemoExample/screenshots/returned_scan_result.png" />
+<img width="23%" src="https://raw.githubusercontent.com/jhansireddy/AndroidScannerDemo/master/ScanDemoExample/screenshots/returned_scan_result.png" alt="Scanned Result" title="Scanned Result"></img>
+
+</div>
+
+# Videos
+
+<div align="center" >
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=Kl7rRZ79m6k" target="_blank"><img src="https://raw.githubusercontent.com/jhansireddy/AndroidScannerDemo/master/ScanDemoExample/screenshots/scanPoints.png" 
+alt="Scan Video" width="40%" border="10" /></a>
 </div>
 
 # Using it in your project
