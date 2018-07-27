@@ -57,3 +57,5 @@ Start the scanlibrary ScanActivity, with this the app will go to library, below 
         }
     }
 ```
+# NOTA
+- Spanish: Si deseas descargar la libreria pesara un poco dado que se incluyeron las librerias de OpenCV en la carpeta libs.
