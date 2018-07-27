@@ -1,8 +1,8 @@
 package com.scanlibrary;
 
-
 import android.graphics.Bitmap;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.CvException;
 import org.opencv.core.CvType;
@@ -15,9 +15,6 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ScanUtils {
 
     // ===========================================================
@@ -25,7 +22,7 @@ public class ScanUtils {
     // ===========================================================
 
     static {
-        System.loadLibrary("opencv_java");
+        // System.loadLibrary("opencv_java3");
     }
 
     private static final String LOG_TAG = ScanUtils.class.getSimpleName();
@@ -87,34 +84,34 @@ public class ScanUtils {
         Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         org.opencv.android.Utils.bitmapToMat(bmp32, image);
 
-//        if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/mat.png", image);
+        //        if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/mat.png", image);
 
         Mat image_proc = image.clone();
         List<MatOfPoint> squares = new ArrayList<>();
         // blur will enhance edge detection
         Mat blurred = image_proc.clone();
 
-//        if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/blured.png", blurred);
+        //        if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/blured.png", blurred);
 
         // Bluring Image
         Imgproc.medianBlur(image_proc, blurred, 9);
         Mat gray0 = new Mat(blurred.size(), CvType.CV_8U);
         Mat gray = new Mat();
 
-//        if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/gray0-1.png", gray0);
-//        if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/blured-0.png", blurred);
+        //        if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/gray0-1.png", gray0);
+        //        if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/blured-0.png", blurred);
 
         List<MatOfPoint> contours = new ArrayList<>();
 
         // find squares in every color plane of the image
         for (int c = 0; c < 3; c++) {
-            int ch[] = {c, 0};
+            int ch[] = { c, 0 };
             List<Mat> bluredList = new ArrayList<>(1);
             bluredList.add(blurred);
             List<Mat> grayList = new ArrayList<>(1);
             grayList.add(gray0);
             Core.mixChannels(bluredList, grayList, new MatOfInt(ch));
-//            if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/gray0-2-" + c + ".png", gray0);
+            //            if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/gray0-2-" + c + ".png", gray0);
 
             // try several threshold levels
             final int threshold_level = 2;
@@ -124,19 +121,20 @@ public class ScanUtils {
                 // Canny helps to catch squares with gradient shading
                 if (l == 0) {
                     Imgproc.Canny(gray0, gray, 10, 30, 3, true);
-//                    if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/gray-1-" + c + ".png", gray);
+                    //                    if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/gray-1-" + c + ".png", gray);
                     Imgproc.dilate(gray, gray, new Mat(), new Point(-1, -1), 1);
-//                    if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/gray-2-" + c + ".png", gray);
+                    //                    if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/gray-2-" + c + ".png", gray);
                 } else {
                     double val = (l + 1) * 255 / threshold_level;
                     Core.compare(gray0, new Scalar(val), gray, Core.CMP_GE);
                 }
 
                 // Find contours and store them in a list
-                Imgproc.findContours(gray, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+                Imgproc.findContours(gray, contours, new Mat(), Imgproc.RETR_LIST,
+                    Imgproc.CHAIN_APPROX_SIMPLE);
 
-//                if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/gray-4-" + c + ".png", gray);
-//                if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/gray0-3-" + c + ".png", gray0);
+                //                if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/gray-4-" + c + ".png", gray);
+                //                if (DEBUG) Highgui.imwrite(Environment.getExternalStorageDirectory().getAbsolutePath() + "/gray0-3-" + c + ".png", gray0);
 
                 // Test contours
                 MatOfPoint2f approx = new MatOfPoint2f();
@@ -158,7 +156,8 @@ public class ScanUtils {
 
                         for (int j = 2; j < 5; j++) {
                             Point[] approxArray = approx.toArray();
-                            double cosine = Math.abs(angle(approxArray[j % 4], approxArray[j - 2], approxArray[j - 1]));
+                            double cosine =
+                                Math.abs(angle(approxArray[j % 4], approxArray[j - 2], approxArray[j - 1]));
                             maxCosine = Math.max(maxCosine, cosine);
                         }
 
@@ -172,7 +171,8 @@ public class ScanUtils {
         return squares;
     }
 
-    public static Bitmap getScannedBitmap(Bitmap bitmap, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
+    public static Bitmap getScannedBitmap(Bitmap bitmap, float x1, float y1, float x2, float y2,
+        float x3, float y3, float x4, float y4) {
         Mat mbgra = bitmapToMat(bitmap);
         // init our output image
         Mat dst = scan(mbgra, x1, y1, x2, y2, x3, y3, x4, y4);
@@ -186,10 +186,12 @@ public class ScanUtils {
         double dx2 = pt2.x - pt0.x;
         double dy2 = pt2.y - pt0.y;
 
-        return (dx1 * dx2 + dy1 * dy2) / Math.sqrt((dx1 * dx1 + dy1 * dy1) * (dx2 * dx2 + dy2 * dy2) + 1e-10);
+        return (dx1 * dx2 + dy1 * dy2) / Math.sqrt(
+            (dx1 * dx1 + dy1 * dy1) * (dx2 * dx2 + dy2 * dy2) + 1e-10);
     }
 
-    private static Mat scan(Mat img, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
+    private static Mat scan(Mat img, float x1, float y1, float x2, float y2, float x3, float y3,
+        float x4, float y4) {
 
         // define the destination image size:
 
@@ -217,12 +219,14 @@ public class ScanUtils {
         img_pts.add(new Point(x4, y4));
 
         // get transformation matrix
-        MatOfPoint2f source = new MatOfPoint2f(img_pts.get(0), img_pts.get(1), img_pts.get(2), img_pts.get(3));
-        MatOfPoint2f dest = new MatOfPoint2f(dst_pts.get(0), dst_pts.get(1), dst_pts.get(2), dst_pts.get(3));
+        MatOfPoint2f source =
+            new MatOfPoint2f(img_pts.get(0), img_pts.get(1), img_pts.get(2), img_pts.get(3));
+        MatOfPoint2f dest =
+            new MatOfPoint2f(dst_pts.get(0), dst_pts.get(1), dst_pts.get(2), dst_pts.get(3));
         Mat transmtx = Imgproc.getPerspectiveTransform(source, dest);
         // apply perspective transformation
         Imgproc.warpPerspective(img, dst, transmtx, dst.size());
-//        warpPerspective(img, dst, transmtx, dst.size());
+        //        warpPerspective(img, dst, transmtx, dst.size());
 
         return dst;
     }
@@ -276,5 +280,4 @@ public class ScanUtils {
     // ===========================================================
     // Inner and Anonymous Classes
     // ===========================================================
-
 }

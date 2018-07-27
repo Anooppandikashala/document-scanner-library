@@ -1,76 +1,98 @@
 package com.scanlibrary;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import java.util.Locale;
+import org.opencv.android.OpenCVLoader;
 
-public class ScanActivity extends Activity {
+public class ScanActivity extends AppCompatActivity {
 
-    public static final String EXTRA_BRAND_IMG_RES = "title_img_res";
-    public static final String EXTRA_TITLE = "title";
-    public static final String EXTRA_LANGUAGE = "language";
-    public static final String EXTRA_ACTION_BAR_COLOR = "ab_color";
-    public static final String EXTRA_IMAGE_LOCATION = "img_location";
-    public static final String RESULT_IMAGE_PATH = ScanFragment.RESULT_IMAGE_PATH;
+  public static final String EXTRA_BUTTON_CLOSE = "button_close";
+  public static final String EXTRA_BRAND_IMG_RES = "title_img_res";
+  public static final String EXTRA_TITLE = "title";
+  public static final String EXTRA_LANGUAGE = "language";
+  public static final String EXTRA_ACTION_BAR_COLOR = "ab_color";
+  public static final String EXTRA_IMAGE_LOCATION = "img_location";
+  public static final String RESULT_IMAGE_PATH = ScanFragment.RESULT_IMAGE_PATH;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scan);
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_scan);
+    OpenCVLoader.initDebug();
+    int titleImgRes = getIntent().getExtras().getInt(EXTRA_BRAND_IMG_RES, 0);
+    int abColor = getIntent().getExtras().getInt(EXTRA_ACTION_BAR_COLOR);
+    boolean showButtonClose = getIntent().getBooleanExtra(EXTRA_BUTTON_CLOSE, false);
+    String title = getIntent().getExtras().getString(EXTRA_TITLE);
+    String locale = getIntent().getExtras().getString(EXTRA_LANGUAGE);
 
-        int titleImgRes = getIntent().getExtras().getInt(EXTRA_BRAND_IMG_RES);
-        int abColor = getIntent().getExtras().getInt(EXTRA_ACTION_BAR_COLOR);
-        String title = getIntent().getExtras().getString(EXTRA_TITLE);
-        String locale = getIntent().getExtras().getString(EXTRA_LANGUAGE);
-
-        if (locale != null) {
-            Locale l = new Locale(locale);
-            Locale.setDefault(l);
-            Configuration config = new Configuration();
-            config.locale = l;
-            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-        }
-
-        if (title != null) setTitle(title);
-        if (titleImgRes != 0) getActionBar().setLogo(titleImgRes);
-
-        if (abColor != 0) {
-            getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(abColor)));
-            getActionBar().setDisplayShowTitleEnabled(false);
-            getActionBar().setDisplayShowTitleEnabled(true);
-        }
-
-        if (savedInstanceState == null) {
-            Bundle args = new Bundle();
-            if (getIntent().getExtras() != null) {
-                args.putAll(getIntent().getExtras());
-            }
-
-            FragmentManager fragMan = getFragmentManager();
-            Fragment f = new ScanFragment();
-            f.setArguments(args);
-            FragmentTransaction fragTransaction = fragMan.beginTransaction();
-            fragTransaction.replace(R.id.contaner, f, "scan_frag").commit();
-        }
+    if (locale != null) {
+      Locale l = new Locale(locale);
+      Locale.setDefault(l);
+      Configuration config = new Configuration();
+      config.locale = l;
+      getBaseContext().getResources()
+          .updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
 
-    @Override
-    public void onBackPressed() {
-        ScanFragment scanFragment = (ScanFragment) getFragmentManager().findFragmentByTag("scan_frag");
-        if (scanFragment != null) {
-            boolean exit = scanFragment.onBackPressed();
-            if (exit) {
-                super.onBackPressed();
-            }
-        } else {
-            super.onBackPressed();
-        }
+    Toolbar toolbar = findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
+
+    if (title != null && getSupportActionBar() != null) {
+      toolbar.setTitle(title);
+      getSupportActionBar().setDisplayShowTitleEnabled(true);
+    } else if (getSupportActionBar() != null) {
+      getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+    if (titleImgRes != 0 && getSupportActionBar() != null) {
+      getSupportActionBar().setLogo(titleImgRes);
     }
 
+    if (showButtonClose && getSupportActionBar() != null) {
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+      getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white);
+      toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View view) {
+          finish();
+        }
+      });
+    }
+
+    if (abColor != 0 && getSupportActionBar() != null) {
+      getSupportActionBar().setBackgroundDrawable(
+          new ColorDrawable(getResources().getColor(abColor)));
+    }
+
+    if (savedInstanceState == null) {
+      Bundle args = new Bundle();
+      if (getIntent().getExtras() != null) {
+        args.putAll(getIntent().getExtras());
+      }
+
+      FragmentManager fragMan = getSupportFragmentManager();
+      Fragment f = new ScanFragment();
+      f.setArguments(args);
+      FragmentTransaction fragTransaction = fragMan.beginTransaction();
+      fragTransaction.replace(R.id.container, f, "scan_frag").commit();
+    }
+  }
+
+  @Override public void onBackPressed() {
+    ScanFragment scanFragment =
+        (ScanFragment) getSupportFragmentManager().findFragmentByTag("scan_frag");
+    if (scanFragment != null) {
+      boolean exit = scanFragment.onBackPressed();
+      if (exit) {
+        super.onBackPressed();
+      }
+    } else {
+      super.onBackPressed();
+    }
+  }
 }
