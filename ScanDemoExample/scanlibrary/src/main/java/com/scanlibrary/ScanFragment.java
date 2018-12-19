@@ -11,8 +11,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,6 +22,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import java.io.File;
@@ -599,7 +599,7 @@ public class ScanFragment extends Fragment {
     if (correctRotation) {
       viewHolder.scaleImageView.setImage(ImageSource.bitmap(scaledBitmap));
       viewHolder.scaleImageView.setVisibility(View.INVISIBLE);
-    }else{
+    } else {
       viewHolder.scaleImageView.setImage(ImageSource.bitmap(scaledBitmap));
       viewHolder.scaleImageView.setVisibility(View.VISIBLE);
     }
