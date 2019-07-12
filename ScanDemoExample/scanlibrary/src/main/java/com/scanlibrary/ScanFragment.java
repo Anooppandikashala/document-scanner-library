@@ -467,17 +467,10 @@ public class ScanFragment extends Fragment {
     startActivityForResult(takePictureIntent, TAKE_PHOTO_REQUEST_CODE);
   }
 
-    private File createImageFile(String fileName) {
-        File storageDir = getActivity().getExternalFilesDir("images");
-        if (storageDir == null) {
-            throw new RuntimeException("Not able to get to External storage");
-        }
-        if (!storageDir.exists()) {
-            storageDir.mkdirs();
-        }
-        File image = new File(storageDir, fileName + ".jpg");
-
-        return image;
+  private File createImageFile(String fileName) {
+    File storageDir = getActivity().getExternalFilesDir("images");
+    if (storageDir == null) {
+      throw new RuntimeException("Not able to get to External storage");
     }
     File image = new File(storageDir, fileName + ".jpg");
 
@@ -859,3 +852,4 @@ public class ScanFragment extends Fragment {
     }
   }
 }
+

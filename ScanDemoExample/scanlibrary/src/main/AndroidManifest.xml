@@ -21,8 +21,8 @@
             android:exported="false"
             android:authorities="${applicationId}.provider"
             android:grantUriPermissions="true">
-                android:name="android.support.FILE_PROVIDER_PATHS"
             <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
     </application>
